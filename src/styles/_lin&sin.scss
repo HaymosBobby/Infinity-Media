@@ -1,0 +1,114 @@
+.login, 
+.signup {
+  height: 100vh;
+  background: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+
+  .log_logo {
+    position: absolute;
+    top: 10%;
+    left: 15%;
+
+    img {
+      width: 70px;
+      height:70px;
+      object-fit: cover;
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 30px;
+    border-radius: 25px;
+    background: #c3c3c3;
+    border: 2px double #ddd;
+    // box-shadow: 0 0 43px 0 #cccccc;
+    
+    .form {
+      display: flex;
+      flex-direction: column;
+
+      .input_container {
+        margin-bottom: 5px;
+
+        label {
+          font-size: 0.7rem;
+          display: block;
+          color: var(--primary_color);
+        } 
+
+        .input {
+          border-radius: 1.5rem;
+          border: 1px solid #caadad;
+          padding: 5px;
+          width: 100%;
+  
+          &:focus {
+            outline: 1px solid var(--primary_color);
+            border: none;
+          }
+        }
+      }
+
+
+      .password {
+        position: relative;
+
+        .password_visibility {
+          position: absolute;
+          right: 10px;
+          top: 20px;
+          width: 17px;
+          cursor: pointer;
+          color: var(--primary_color);
+        }
+      }
+
+      .check_cont {
+        display: flex;
+        margin: 10px 0;
+
+        .checkbox {
+          margin-right: 5px;
+          cursor: pointer;
+          accent-color: var(--primary_color);
+        }
+      }
+
+      .btn {
+          transition: all 0.3s ease-in-out;
+          padding: 0.5rem 1.5rem;
+          border: none;
+          background: var(--primary_color);
+          color: #fff;
+          border-radius: 1.25rem;
+          margin-top: 10px;
+    
+          &:hover {
+            background: #fff;
+            color: var(--primary_color);
+          }
+    
+      }
+    }
+
+    .existing {
+      font-size: 0.7rem;
+      margin: 10px 0;
+      color: var(--primary_color);
+
+      a {
+        color: var(--primary_color1);
+
+        &:hover {
+          color: var(--primary_color);
+        }
+      }
+    }
+  }
+}

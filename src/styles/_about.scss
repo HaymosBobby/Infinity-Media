@@ -1,0 +1,139 @@
+.about_page {
+  .about_hero {
+    display: flex;
+    padding: 30px 30px 30px 0;
+
+    .about_image {
+      position: relative;
+      width: 45%;
+      margin-right: 30px;
+      img {
+        position: absolute;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+      .first_image {
+        top: 25px;
+        left: 15%;
+        width: 200px;
+        height: 130px;
+        z-index: 2;
+      }
+
+      .second_image {
+        bottom: -20px;
+        left: 13%;
+        width: 300px;
+        height: 150px;
+        z-index: 2;
+      }
+
+      .third_image {
+        left: 45%;
+        top: 15px;
+        width: 250px;
+        height: 350px;
+      }
+
+      .underlay {
+        background: var(--primary_color1);
+        max-width: 80%;
+        min-height: 400px;
+      }
+    }
+    .about_content {
+      width: 50%;
+      color: var(--primary_color);
+
+      h4 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+      }
+
+      p {
+        font-size: 0.8rem;
+      }
+      .partners {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+
+        .partner {
+          margin-right: 20px;
+          display: flex;
+          align-items: center;
+
+
+          img {
+            height: 20px;
+            width: 50px;
+            margin-right: 7px;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      padding: 30px;
+     
+
+      .about_image {
+        display: none;
+      }  
+      
+      .about_content {
+        width: 100%;
+      }
+    }
+  }
+
+  .mop {
+    margin: 50px 0;
+
+    h4 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .pre_container {
+      display: flex;
+      padding: 0 50px;
+      align-items: center;
+      justify-content: space-between;
+      width: 70%;
+      margin: auto;
+
+      .pre_card {
+        .pre_image {
+          border-radius: 10px;
+          overflow: hidden;
+          height: 200px;
+          width: 180px;
+          
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .pre_profile {
+          padding: 20px 10px;
+          text-align: center;
+
+          .pre_name {
+            font-size: 0.72rem;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .pre_container {
+        flex-direction: column;
+      }
+    }
+  }
+}

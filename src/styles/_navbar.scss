@@ -1,0 +1,133 @@
+.navbar {
+  // background: var(--primary_color);
+  // background: transparent;
+  padding: 0.7rem;
+  width: 100%;
+  position: fixed;
+  color: #fff;
+  transition: background 0.5s ease-in-out;
+  z-index: 999;
+
+  .container {
+    align-items: center;
+    justify-content: space-between;
+
+
+    .logo {
+      height: 50px;
+      img {
+        width: 50px;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .navigations {
+      ul {
+        display: flex;
+
+        li {
+          padding: 0 0.5rem;
+          margin: 0.5rem;
+          color: #fff;
+          font-size: 0.8rem;
+        }
+
+        a{
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+
+    .socials {
+      .social {
+        padding: 0rem 0.3rem;
+        color: #fff;
+        border: 2px;
+      }
+    }
+
+    .mobile_navigator {
+      display: none;
+      // position: relative;
+      
+      .mobile_container {
+        
+        .mobile_navigations {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          background: #fff;
+          border-radius: 5px;
+          box-shadow: 0 2px 6px #725d5dfa;
+          padding: 20px 0;
+          top: 72px;
+          right: 0;
+          width: 100%;
+          transition: all 0.75s ease-in-out;
+          transform: translateX(-100%);
+          opacity: 0;
+          // height: 200px;
+          
+          ul {
+
+            a{
+              
+              &:hover {
+                color: #fff;
+              }
+            }
+
+            li {
+              transition: all 0.3s ease-in-out;
+              padding: 20px;
+
+              &:hover {
+                background-color: var(--primary_color);
+              }
+            }
+          }
+          
+          a {
+            color: var(--primary_color);
+          }
+          
+          
+
+          .mobile_socials {
+            align-self: center;
+            margin: 30px 0;
+            
+            a {
+              padding: 0 20px;
+              
+              &:hover {
+                opacity: 0.6;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+
+    .container .mobile_navigator {
+      display: block ;
+    }
+
+    .navigations,
+    .socials {
+      display: none;
+    }
+
+  }
+}
+
+.dash_nav {
+  height: 10vh;
+  width: 100%;
+  background: red;
+}

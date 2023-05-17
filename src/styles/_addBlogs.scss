@@ -1,0 +1,39 @@
+.add_blogs {
+
+  #form_data {
+    .blog_img {
+      border: 1px solid var(--primary_color1);
+      width: 100%;
+      margin-bottom: 10px;
+      
+      &::-webkit-file-upload-button {
+        background: var(--primary_color1);
+        color: var(--primary_color);
+        border: none;
+        padding: 1rem;
+        cursor: pointer;
+        
+        &:hover {
+          background: var(--primary_color);
+          color: #fff;
+        }
+      }
+    }
+    
+    .fore_content {
+      .fore {
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 10px;
+        border: 1px solid var(--primary_color1);
+        outline: none;
+      }
+    }
+
+    .message_container {
+      .message {
+        margin: 10px 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+.single_blog {
+  .featured_image {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+
+    
+    img {
+      transition: all 0.75s ease-in-out;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .single_blog_content {
+
+    p, .imaged_paragraph {
+      margin: 1rem 0;
+
+     img {
+      width: 300px;
+      height: 200px;
+      float: right;
+
+      @media screen and (max-width: 768px) {
+        float: none;
+        width: 100%;
+      }
+     } 
+    }
+  }
+}
+
+.single_blog_page {
+  .container {
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+}
