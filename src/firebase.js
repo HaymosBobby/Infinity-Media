@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCTJnnsqNRQrJ6pE4I_--9yQio4OygfrBM",
+  apiKey: process.env.REACT_APP_FIREBASE_KEY,
   authDomain: "infinity-media-b1f68.firebaseapp.com",
   projectId: "infinity-media-b1f68",
   storageBucket: "infinity-media-b1f68.appspot.com",

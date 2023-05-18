@@ -4,7 +4,7 @@ const AddPrograms = () => {
   return (
     <div className="add_programs">
       <form
-        action="http://localhost:8080/api/imedia-programs"
+        action="http://localhost:5000/api/imedia-programs"
         method="POST"
         encType="multipart/form-data"
       >

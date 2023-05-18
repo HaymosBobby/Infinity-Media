@@ -1,79 +1,55 @@
-import { useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import Podcast from "./Podcast";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { app } from ".././firebase";
+import axios from "axios";
+import Loader from "./Loader";
 
 const Podcasts = () => {
-  const [file, setFile] = useState(null);
-  const audioRef = useRef();
+  const [podcasts, setPodcasts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleFileUpload = () => {
-    const storage = getStorage(app);
-    const storageRef = ref(storage, file.name);
-
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-            break;
-        }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-        });
+  useEffect(() => {
+    const getPodcasts = async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/imedia-podcasts"
+        );
+        res && setPodcasts(res.data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        setError(true);
+        console.log(error);
       }
-    );
-  };
+    };
+
+    getPodcasts();
+  }, []);
 
   return (
     <div>
-      <input
-        type="file"
-        ref={audioRef}
-        onChange={(e) => {
-
-          e.preventDefault();
-          setFile(e.target.files[0]);
-
-        }}
-      />
-      <button onClick={handleFileUpload}>Upload</button>
-      <Podcast />
-      <Podcast />
-      <Podcast />
-      <Podcast />
-      <Podcast />
-      <Podcast />
-      <Podcast />
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        "An Error Occurred"
+      ) : (
+        <div>
+          {podcasts.length > 0 &&
+            podcasts.map((podcast) => {
+              return (
+                <Podcast
+                  title={podcast.title}
+                  excerpt={podcast.excerpt}
+                  createdAt={podcast.createdAt}
+                  podcastUrl={podcast.podcastUrl}
+                  key={podcast._id}
+                  id={podcast._id}
+                />
+              );
+            })}
+        </div>
+      )}
     </div>
   );
 };

@@ -15,7 +15,10 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const Podcast = () => {
+const Podcast = ({ title, excerpt, createdAt, podcastUrl }) => {
+  const iso = new Date(createdAt);
+  const date = iso.toLocaleDateString("sv-SE");
+
   const podcastRef = useRef(null);
 
   const playPodcast = () => {
@@ -30,8 +33,7 @@ const Podcast = () => {
       <div className="podcast_content">
         <div className="podcast_info">
           <span className="date txt_small">
-            <CalendarMonth sx={{ fontSize: 18 }} className="icon" /> June 25,
-            2022
+            <CalendarMonth sx={{ fontSize: 18 }} className="icon" /> {date}
           </span>
           <span className="time txt_small">
             <TimerOutlined sx={{ fontSize: 18 }} className="icon" /> 00:00
@@ -42,18 +44,18 @@ const Podcast = () => {
         </div>
         <div className="podcast_details">
           <Link to="/podcast/:id">
-            <h2>Title of my podcast</h2>
+            <h2>{title}</h2>
           </Link>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt
-            consectetur quibusdam nesciunt aspernatur temporibus, natus ad
-            aliquam est illum voluptates.
-          </p>
+          <p>{excerpt}</p>
         </div>
         <div className="podcast_control">
           <div className="podcast_play_control">
             <Replay10 className="icon" />
-            <PlayCircleOutline onClick={playPodcast} className="icon" sx={{ fontSize: 35 }} />
+            <PlayCircleOutline
+              onClick={playPodcast}
+              className="icon"
+              sx={{ fontSize: 35 }}
+            />
             <Forward30 className="icon" />
           </div>
           <div className="podcast_time_control">
@@ -70,10 +72,7 @@ const Podcast = () => {
           <div className="mobile_podcast_control">
             <div className="mobile_play_control">
               <Replay10 className="icon" />
-              <PlayCircleOutline
-                className="icon"
-                sx={{ fontSize: 35 }}
-              />
+              <PlayCircleOutline className="icon" sx={{ fontSize: 35 }} />
               <Forward30 className="icon" />
             </div>
             <div className="mobile_shuffle_control">
@@ -85,7 +84,7 @@ const Podcast = () => {
         </div>
       </div>
 
-      <audio src={podcast} ref={podcastRef}></audio>
+      <audio src={podcastUrl} ref={podcastRef}></audio>
     </div>
   );
 };
