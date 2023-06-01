@@ -1,12 +1,12 @@
 import podcast1 from "../img/podcast1.jpg";
-import podcast from "../img/podcast.mp3";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
   CalendarMonth,
   FileDownloadOutlined,
   Forward30,
   MusicNote,
+  PauseCircleOutline,
   PlayCircleOutline,
   Replay10,
   Share,
@@ -15,14 +15,60 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const Podcast = ({ title, excerpt, createdAt, podcastUrl }) => {
+const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
   const iso = new Date(createdAt);
   const date = iso.toLocaleDateString("sv-SE");
 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const podcastRef = useRef(null);
 
-  const playPodcast = () => {
-    podcastRef.current.play();
+  const handlePodcast = () => {
+    setIsPlaying(!isPlaying);
+    isPlaying ? podcastRef.current.pause() : podcastRef.current.play();
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    setCurrentTime(e.target.value);
+    // setDuration(e.target.duration);
+
+
+    podcastRef.current.currentTime = e.target.value; 
+    
+    // console.log(podcastRef.current.currentTime);
+  };
+  
+  const handleSkip = (amount) => {
+    if (amount === "ten"){
+      return podcastRef.current.currentTime -= 10; 
+    }
+    if (amount === "thirty"){
+      return podcastRef.current.currentTime += 30; 
+    }
+  }
+
+
+  const timeUpdateHandler = (e) => {
+    e.preventDefault();
+    setCurrentTime(e.target.currentTime);
+    setDuration(e.target.duration);
+    // Calculate Percentage
+    // const roundedCurrent = Math.round(current);
+    // const roundedDuration = Math.round(duration);
+    // const animation = Math.round((roundedCurrent / roundedDuration) * 100);
+  };
+  
+  const songEndHandler = (e) => {
+    e.preventDefault();
+    setIsPlaying(false);
+  }
+
+  const getTime = (time) => {
+    return(
+      (Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2))
+    );
   };
 
   return (
@@ -43,25 +89,33 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl }) => {
           </span>
         </div>
         <div className="podcast_details">
-          <Link to="/podcast/:id">
+          <Link to={`/podcast/${id}`}>
             <h2>{title}</h2>
           </Link>
           <p>{excerpt}</p>
         </div>
         <div className="podcast_control">
           <div className="podcast_play_control">
-            <Replay10 className="icon" />
-            <PlayCircleOutline
-              onClick={playPodcast}
-              className="icon"
-              sx={{ fontSize: 35 }}
-            />
-            <Forward30 className="icon" />
+            <Replay10 className="icon" onClick={() => handleSkip("ten")} />
+            {isPlaying ? (
+              <PauseCircleOutline
+                onClick={handlePodcast}
+                className="icon"
+                sx={{ fontSize: 35 }}
+              />
+            ) : (
+              <PlayCircleOutline
+                onClick={handlePodcast}
+                className="icon"
+                sx={{ fontSize: 35 }}
+              />
+            )}
+            <Forward30 className="icon" onClick={() => handleSkip("thirty")} />
           </div>
           <div className="podcast_time_control">
-            <p className="start">Start</p>
-            <input type="range" />
-            <p className="stop">End</p>
+            <p className="start">{getTime(currentTime)}</p>
+            <input type="range" min={0} max={  duration || 0} onChange={handleDrag} value={currentTime} />
+            <p className="stop">{duration ? getTime(duration): "0:00"}</p>
           </div>
           <div className="podcast_shuffle_control">
             <VolumeUp className="icon" />
@@ -71,9 +125,21 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl }) => {
 
           <div className="mobile_podcast_control">
             <div className="mobile_play_control">
-              <Replay10 className="icon" />
-              <PlayCircleOutline className="icon" sx={{ fontSize: 35 }} />
-              <Forward30 className="icon" />
+              <Replay10 className="icon" onClick={() => handleSkip("ten")} />
+              {isPlaying ? (
+                <PauseCircleOutline
+                  onClick={handlePodcast}
+                  className="icon"
+                  sx={{ fontSize: 35 }}
+                />
+              ) : (
+                <PlayCircleOutline
+                  onClick={handlePodcast}
+                  className="icon"
+                  sx={{ fontSize: 35 }}
+                />
+              )}
+              <Forward30 className="icon" onClick={() => handleSkip("thirty")} />
             </div>
             <div className="mobile_shuffle_control">
               <VolumeUp className="icon" />
@@ -84,7 +150,13 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl }) => {
         </div>
       </div>
 
-      <audio src={podcastUrl} ref={podcastRef}></audio>
+      <audio
+        src={podcastUrl}
+        ref={podcastRef}
+        onTimeUpdate={timeUpdateHandler}
+        onEnded={songEndHandler}
+      ></audio>
+      {/*  onLoadedMetadata={timeUpdateHandler}  */}
     </div>
   );
 };

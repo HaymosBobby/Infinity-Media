@@ -3,11 +3,13 @@ import Loader from "../components/Loader";
 import Sidebar from "../components/Sidebar";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Error from "../components/Error";
 
 const Blogs = () => {
   const [blogLists, setBlogLists] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const url = "http://localhost:5000/api/imedia-blogs";
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +22,10 @@ const Blogs = () => {
       } catch (err) {
         setIsLoading(false);
         setError(true);
+        if (!err.response) {
+          return setErrorMsg(err.message);
+        }
+        setErrorMsg(err.response.data);
       }
     };
 
@@ -36,7 +42,7 @@ const Blogs = () => {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          "An Error Occurred"
+          <Error message={errorMsg}/>
         ) : (
           <div className="blogs">
             {blogLists.length > 0 &&

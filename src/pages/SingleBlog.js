@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import BlogComp from "../components/BlogComp";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 const SingleBlog = () => {
   const [blog, setBlog] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const { id } = useParams();
 
@@ -26,6 +28,10 @@ const SingleBlog = () => {
       } catch (err) {
         setIsLoading(false);
         setError(true);
+        if (!err.response) {
+          return setErrorMsg(err.message);
+        }
+        setErrorMsg(err.response.data);
       }
     };
 
@@ -41,12 +47,12 @@ const SingleBlog = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        "An Error Occured"
+        <Error message={errorMsg} />
       ) : (
         Object.keys(blog).length > 0 && (
           <BlogComp
-            key={blog.id}
-            id={blog.id}
+            key={blog._id}
+            id={blog._id}
             title={blog.title}
             message={blog.message}
             picOne={blog.picOne.imageUrl}

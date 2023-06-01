@@ -107,6 +107,11 @@ img {
   object-fit: cover;
 }
 
+.icon {
+  margin-right: 0.3rem;
+  cursor: pointer;
+}
+
 .podcast_control {
   display: flex;
   align-items: center;
@@ -189,7 +194,8 @@ img {
   }
 }
 
-.loader {
+.loader,
+.error {
   width: 100%;
   height: 450px;
   display: flex;
@@ -214,6 +220,79 @@ img {
   }
 }
 
+.spinner {
+  display: inline-block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+.spinner div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  // margin: 6px;
+  border: 3px solid var(--primary_color1);
+  border-radius: 50%;
+  animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: var(--primary_color1) transparent transparent transparent;
+}
+.spinner div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.spinner div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.spinner div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.image_cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.75rem;
+
+  .view {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #00008b;
+    border: 1px dotted #00008b98;
+    cursor: pointer;
+  }
+
+  .delete {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: crimson;
+    border: 1px dotted #dc143c99;
+    cursor: pointer;
+  }
+}
+
 @import "./navbar";
 @import "./homeSection";
 @import "./podcast";
@@ -226,3 +305,7 @@ img {
 @import "./lin&sin";
 @import "./dashboardSidebar";
 @import "./addBlogs";
+
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDczZTU5ODczOWRlY2M0YWM2MmYxOWEiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg1MzE3MDE3fQ.8_ohfvkdSz30olecppQNvMtgs95FhtaPYw-MHv-SGLA
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDczZTU5ODczOWRlY2M0YWM2MmYxOWEiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg1MzE3MTg2fQ.Pgjm6dHX8VRdbSaMMDywyKxP5RZV9PAanASNGyRYjXs

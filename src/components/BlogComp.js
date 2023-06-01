@@ -4,7 +4,7 @@ import React from "react";
 import Sidebar from "./Sidebar";
 
 
-const BlogComp = ({id, title, message, picOne, picTwo}) => {
+const BlogComp = ({ title, message, picOne, picTwo}) => {
   return (
     <div>
 

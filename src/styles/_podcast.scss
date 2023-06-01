@@ -10,10 +10,14 @@
 
   .podcast_image {
     padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 3;
 
     img {
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       object-fit: cover;
     }
@@ -21,6 +25,7 @@
 
   .podcast_content {
     padding: 1rem;
+    flex: 9;
     width: 100%;
 
     .podcast_details {
@@ -44,10 +49,12 @@
 
     .podcast_image {
       padding: none;
+      flex: 1;
     }
-
+    
     .podcast_content {
       padding: 2rem;
+      flex: 1;
 
       .podcast_control {
         flex-direction: column;

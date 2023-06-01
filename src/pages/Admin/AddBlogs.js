@@ -1,13 +1,19 @@
 import { Editor } from "@tinymce/tinymce-react";
 
 const AddBlogs = () => {
+
+  const handleSubmit = () => {
+
+  }
+  
   return (
     <div className="add_blogs">
       <form
-        action="http://localhost:8080/api/imedia-blogs"
+        action="http://localhost:5000/api/imedia-blogs"
         method="POST"
         encType="multipart/form-data"
         id="form_data"
+        onSubmit={handleSubmit}
       >
         <div>
           <input className="blog_img" type="file" name="image1" />

@@ -14,33 +14,39 @@ import ilogo from "../img/ilogo.png";
 
 const NavBar = () => {
   const [opened, setOpened] = useState(false);
+  const [scroll, setScroll] = useState(false);
 
   window.onscroll = () => {
-    
-      window.scrollY > 100
-        ? document.querySelector(".navbar").classList.add("sticky")
-        : document.querySelector(".navbar").classList.remove("sticky");
+    setOpened(false);
 
-        setOpened(false)
+    window.scrollY > 100 ? setScroll(true) : setScroll(false);
 
-        document
-        .querySelector(".mobile_navigations")
-        .classList.remove("display_mobile_nav")
+    // window.scrollY > 100
+    //   ? document.querySelector(".navbar").classList.add("sticky")
+    //   : document.querySelector(".navbar").classList.remove("sticky");
+
+    //   document
+    //   .querySelector(".mobile_navigations")
+    //   .classList.remove("display_mobile_nav")
   };
+
+  // const handleScroll = () => {
+  //   window.scrollY > 100 ? setScroll(true)
+  // }
 
   const displayMobileNav = () => {
     setOpened(!opened);
-    opened
-      ? document
-          .querySelector(".mobile_navigations")
-          .classList.remove("display_mobile_nav")
-      : document
-          .querySelector(".mobile_navigations")
-          .classList.add("display_mobile_nav");
+    // opened
+    //   ? document
+    //       .querySelector(".mobile_navigations")
+    //       .classList.remove("display_mobile_nav")
+    //   : document
+    //       .querySelector(".mobile_navigations")
+    //       .classList.add("display_mobile_nav");
   };
 
   return (
-    <div className="navbar">
+    <div className={`navbar ${scroll ? "sticky" : ""}`}>
       <div className="container">
         <div className="logo">
           <Link to="/">
@@ -86,7 +92,11 @@ const NavBar = () => {
               {opened ? <Close className="icon" /> : <Menu className="icon" />}
             </div>
 
-            <div className="mobile_navigations">
+            <div
+              className={`mobile_navigations ${
+                opened ? "display_mobile_nav" : ""
+              }`}
+            >
               <ul>
                 <Link to="/">
                   <li>Home</li>
