@@ -15,7 +15,7 @@ const columns = [
     renderCell: (params) => {
       return (
         <div className="image_cell">
-          <img className="image" src={params.row.picOne.imageUrl} alt="" />
+          <img className="image" src={params.row.picOne} alt="" />
           {params.row.title}
         </div>
       );

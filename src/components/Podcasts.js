@@ -15,28 +15,25 @@ const Podcasts = () => {
       setIsLoading(true);
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/imedia-podcasts",
-          {
-            headers: {
-              "x-auth-token":
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDY5N2I5ODJjMWZlYjZiNDk0ZDMzNmMiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg0NjM0NTIxfQ.9h_2zS3QQdH5zedD9nl4ic4tquMyqLP8yWWufFlPdIY",
-            },
-          }
+          "http://localhost:5000/api/imedia-podcasts"
         );
-        res && setPodcasts(res.data);
+        res && setPodcasts(res.data.data);
         setIsLoading(false);
       } catch (err) {
+        console.log(err)
         setIsLoading(false);
         setError(true);
         if (!err.response) {
           return setErrorMsg(err.message);
         }
-        setErrorMsg(err.response.data);
+        setErrorMsg(err.response.data.message);
       }
     };
 
     getPodcasts();
-  }, []);
+  }, [setPodcasts, setIsLoading, setError, setErrorMsg]);
+
+  
 
   return (
     <div>
@@ -53,7 +50,9 @@ const Podcasts = () => {
                   title={podcast.title}
                   excerpt={podcast.excerpt}
                   createdAt={podcast.createdAt}
-                  podcastUrl={podcast.podcastUrl}
+                  podcastURL={podcast.podcastURL}
+                  picURL={podcast.programId.picURL} 
+                  podcasts={podcasts}
                   key={podcast._id}
                   id={podcast._id}
                 />

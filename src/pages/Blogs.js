@@ -16,7 +16,7 @@ const Blogs = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(url);
-        const data = response.data;
+        const data = response.data.data;
         setBlogLists(data);
         setIsLoading(false);
       } catch (err) {
@@ -42,7 +42,7 @@ const Blogs = () => {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <Error message={errorMsg}/>
+          <Error message={errorMsg} />
         ) : (
           <div className="blogs">
             {blogLists.length > 0 &&
@@ -52,7 +52,7 @@ const Blogs = () => {
                     title={blog.title}
                     excerpt={blog.excerpt}
                     createdAt={blog.createdAt}
-                    picOne={blog.picOne.imageUrl}
+                    picOneURL={blog.picOneURL}
                     key={blog._id}
                     id={blog._id}
                   />

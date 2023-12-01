@@ -96,6 +96,12 @@
             background: #fff;
             color: var(--primary_color);
           }
+
+
+          &:disabled {
+            cursor: not-allowed;
+            background: #513c3c;
+          }
     
       }
     }

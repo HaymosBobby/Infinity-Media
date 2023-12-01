@@ -1,14 +1,14 @@
 
 import { FiberManualRecord } from "@mui/icons-material";
 import React from "react";
-import Sidebar from "./Sidebar";
+// import Sidebar from "./Sidebar";
 
 
 const BlogComp = ({ title, message, picOne, picTwo}) => {
   return (
     <div>
 
-      <div className="container">
+      {/* <div className="container"> */}
         <div className="single_blog">
           <div className="featured_image">
             <img src={picOne} alt="single blog" />
@@ -60,8 +60,8 @@ const BlogComp = ({ title, message, picOne, picTwo}) => {
             </div>
           </div>
         </div>
-        <Sidebar />
-      </div>
+        {/* <Sidebar /> */}
+      {/* </div> */}
     </div>
   );
 };

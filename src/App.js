@@ -24,14 +24,14 @@ import { Context } from "./context/Context";
 import { useContext } from "react";
 // import { Context } from "./context/Context";
 
+
+// https://images.getpng.net/uploads/preview/instagram-social-network-app-interface-icons-smartphone-frame-screen-template27-1151637511568djfdvfkdob.webp
+
 function App() {
   // console.log(user);
   const { user } = useContext(Context);
 
   // const [state ] =  useReducer(INITIAL_STATE);
-
-  
-  
 
   return (
     <div className="App">
@@ -77,6 +77,13 @@ function App() {
           <Route exact path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
+      {/* <audio
+        src={podcastUrl}
+        ref={podcastRef}
+        onTimeUpdate={timeUpdateHandler}
+        onEnded={songEndHandler}
+      ></audio> */}
+
       {/* </AuthContextProvider> */}
     </div>
   );

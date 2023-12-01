@@ -15,7 +15,16 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
+const Podcast = ({
+  title,
+  excerpt,
+  createdAt,
+  podcastURL,
+  id,
+  podcasts,
+  picURL,
+}) => {
+  // console.log(podcasts);
   const iso = new Date(createdAt);
   const date = iso.toLocaleDateString("sv-SE");
 
@@ -34,21 +43,19 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
     setCurrentTime(e.target.value);
     // setDuration(e.target.duration);
 
+    podcastRef.current.currentTime = e.target.value;
 
-    podcastRef.current.currentTime = e.target.value; 
-    
     // console.log(podcastRef.current.currentTime);
   };
-  
-  const handleSkip = (amount) => {
-    if (amount === "ten"){
-      return podcastRef.current.currentTime -= 10; 
-    }
-    if (amount === "thirty"){
-      return podcastRef.current.currentTime += 30; 
-    }
-  }
 
+  const handleSkip = (amount) => {
+    if (amount === "ten") {
+      return (podcastRef.current.currentTime -= 10);
+    }
+    if (amount === "thirty") {
+      return (podcastRef.current.currentTime += 30);
+    }
+  };
 
   const timeUpdateHandler = (e) => {
     e.preventDefault();
@@ -59,22 +66,22 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
     // const roundedDuration = Math.round(duration);
     // const animation = Math.round((roundedCurrent / roundedDuration) * 100);
   };
-  
+
   const songEndHandler = (e) => {
     e.preventDefault();
     setIsPlaying(false);
-  }
+  };
 
   const getTime = (time) => {
-    return(
-      (Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2))
+    return (
+      Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
     );
   };
 
   return (
     <div className="podcast">
       <div className="podcast_image">
-        <img src={podcast1} alt="podcast" />
+        <img src={picURL ? picURL : podcast1} alt="podcast" />
       </div>
       <div className="podcast_content">
         <div className="podcast_info">
@@ -114,8 +121,14 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
           </div>
           <div className="podcast_time_control">
             <p className="start">{getTime(currentTime)}</p>
-            <input type="range" min={0} max={  duration || 0} onChange={handleDrag} value={currentTime} />
-            <p className="stop">{duration ? getTime(duration): "0:00"}</p>
+            <input
+              type="range"
+              min={0}
+              max={duration || 0}
+              onChange={handleDrag}
+              value={currentTime}
+            />
+            <p className="stop">{duration ? getTime(duration) : "0:00"}</p>
           </div>
           <div className="podcast_shuffle_control">
             <VolumeUp className="icon" />
@@ -139,7 +152,10 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
                   sx={{ fontSize: 35 }}
                 />
               )}
-              <Forward30 className="icon" onClick={() => handleSkip("thirty")} />
+              <Forward30
+                className="icon"
+                onClick={() => handleSkip("thirty")}
+              />
             </div>
             <div className="mobile_shuffle_control">
               <VolumeUp className="icon" />
@@ -151,9 +167,10 @@ const Podcast = ({ title, excerpt, createdAt, podcastUrl, id }) => {
       </div>
 
       <audio
-        src={podcastUrl}
+        src={podcastURL}
         ref={podcastRef}
         onTimeUpdate={timeUpdateHandler}
+        onLoadedMetadata={timeUpdateHandler}
         onEnded={songEndHandler}
       ></audio>
       {/*  onLoadedMetadata={timeUpdateHandler}  */}

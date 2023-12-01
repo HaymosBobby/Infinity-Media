@@ -29,11 +29,12 @@ const DataTable = ({ rows, columns, name }) => {
 
       setData(newData);
 
-      // await axios.delete(`http://localhost:5000/api/imedia-${name}s/${id}`, {
-      //   headers: {
-      //     "x-auth-token": token,
-      //   },
-      // });
+      await axios.delete(`http://localhost:5000/api/imedia-${name}s/${id}`, {
+        headers: {
+          "x-auth-token": token,
+        },
+      });
+      
     } catch (error) {
       console.log(error);
     }

@@ -20,29 +20,10 @@ const NavBar = () => {
     setOpened(false);
 
     window.scrollY > 100 ? setScroll(true) : setScroll(false);
-
-    // window.scrollY > 100
-    //   ? document.querySelector(".navbar").classList.add("sticky")
-    //   : document.querySelector(".navbar").classList.remove("sticky");
-
-    //   document
-    //   .querySelector(".mobile_navigations")
-    //   .classList.remove("display_mobile_nav")
   };
-
-  // const handleScroll = () => {
-  //   window.scrollY > 100 ? setScroll(true)
-  // }
 
   const displayMobileNav = () => {
     setOpened(!opened);
-    // opened
-    //   ? document
-    //       .querySelector(".mobile_navigations")
-    //       .classList.remove("display_mobile_nav")
-    //   : document
-    //       .querySelector(".mobile_navigations")
-    //       .classList.add("display_mobile_nav");
   };
 
   return (

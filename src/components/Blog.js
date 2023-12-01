@@ -2,14 +2,14 @@ import { FiberManualRecord } from "@mui/icons-material";
 // import blogimage from "../img/blogimage.jpg";
 import { Link } from "react-router-dom";
 
-const Blog = ({ title, excerpt, createdAt, picOne, id }) => {
+const Blog = ({ title, excerpt, createdAt, picOneURL, id }) => {
   const iso = new Date(createdAt);
   const date = iso.toLocaleDateString("sv-SE");
   // d.toLocaleDateString('en-US');
   return (
     <div className="card">
       <div className="card_content">
-        <img className="card_image" src={picOne} alt={title} />
+        <img className="card_image" src={picOneURL} alt={title} />
         <div className="card_info">
           <div className="blog_info">
             <span className="txt_small">Infinity media</span>

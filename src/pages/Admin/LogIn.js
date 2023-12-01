@@ -12,9 +12,9 @@ const LogIn = () => {
 
   const [open, setOpen] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const {user, dispatch, isLoading, error, errorMessage } =
+  const { user, dispatch, isLoading, error, errorMessage } =
     useContext(Context);
 
   const handleLogin = async (e) => {
@@ -38,8 +38,18 @@ const LogIn = () => {
       });
 
       // <Navigate to="/imedia-admin/dashboard" />;
-      response.data.isAdmin && navigate("/imedia-admin/dashboard", { replace: true });
+      if (response.data.isAdmin) {
+        navigate("/imedia-admin/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch (error) {
+      if (error.message && error.response) {
+        return dispatch({
+          type: "LOGIN_FAILURE",
+          payload: error.response.data,
+        });
+      }
       if (error.response) {
         return dispatch({
           type: "LOGIN_FAILURE",
@@ -53,13 +63,12 @@ const LogIn = () => {
     }
   };
 
-  console.log(user);
+  // console.log(user);
 
   const handlePassword = (e) => {
     e.preventDefault();
     setOpen(!open);
   };
-
 
   return (
     <div className="login">
@@ -105,8 +114,8 @@ const LogIn = () => {
             <input name="forever_log" type="checkbox" className="checkbox" />
             <label htmlFor="forever_log">Keep me signed in</label>
           </p>
-          <button className="btn" type="submit">
-            {isLoading && <Spinner />} Sign In
+          <button className="btn" type="submit" disabled={isLoading}>
+            {isLoading ? <Spinner /> : "Sign In"}
           </button>
           {error && <small style={{ marginTop: "10px" }}>{errorMessage}</small>}
         </form>

@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import logo from "../../img/ilogo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Visibility, VisibilityOffOutlined } from "@mui/icons-material";
+import Spinner from "../../components/Spinner";
 // import Spinner from "../../components/Spinner"
 
 const SignUp = () => {
@@ -11,8 +12,14 @@ const SignUp = () => {
   const passwordRef = useRef();
   const confirm_passwordRef = useRef();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [open, setOpen] = useState(false);
   const [openCon, setOpenCon] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -22,20 +29,28 @@ const SignUp = () => {
     const confirm_password = confirm_passwordRef.current.value;
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/imedia-auth/register",
-        {
-          username,
-          email,
-          password,
-          confirm_password,
-        }
-      );
+      setIsLoading(true);
+      await axios.post("http://localhost:5000/api/imedia-auth/register", {
+        username,
+        email,
+        password,
+        confirm_password,
+      });
 
-      console.log(username);
-      console.log(res);
+      setIsLoading(false);
+
+      navigate("/imedia-admin/login", { replace: true });
     } catch (error) {
-      console.log(error);
+      setError(true);
+      setIsLoading(false);
+      // console.log(error);
+      // if (error.message && error.response) {
+      //   return setErrorMessage(error.response.data);
+      // }
+      // if (error.response) {
+      //   return setErrorMessage(error.response.data);
+      // }
+      setErrorMessage(error.response.data.message);
     }
   };
 
@@ -127,8 +142,9 @@ const SignUp = () => {
           </div>
 
           <button className="btn" type="submit">
-            Sign Up
+            {isLoading ? <Spinner /> : "Sign Up"}
           </button>
+          {error && <small style={{ marginTop: "10px" }}>{errorMessage}</small>}
         </form>
         <p className="existing">
           Already have an existing account?{" "}

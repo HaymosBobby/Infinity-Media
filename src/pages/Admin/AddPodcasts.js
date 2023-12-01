@@ -17,17 +17,24 @@ const AddPodcasts = () => {
   const [excerpt, setExcerpt] = useState("");
   const [progress, setProgress] = useState(0);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user.token;
+  const id = user.userDetails._id;
+
   const handlePodcastUpload = (e) => {
     e.preventDefault();
     if (file.type !== "audio/mpeg") {
       throw new Error("Only Audio is allowed....");
     }
 
-    const filename = `${new Date()}-imedia-${file.name}`;
+    const filename = `${Date.now()}-imedia-${file.name}`;
     const storage = getStorage(app);
-    const storageRef = ref(storage, filename);
+    const storageRef = ref(storage, `podcasts/${filename}`);
+    const metadata = {
+      contentType: "audio/mpeg",
+    };
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
     // Register three observers:
     // 1. 'state_changed' observer, called any time the state changes
@@ -60,9 +67,9 @@ const AddPodcasts = () => {
       () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        setProgress(0);
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log("File available at", downloadURL);
-
           const addPodcast = async () => {
             try {
               const response = await axios.post(
@@ -72,6 +79,12 @@ const AddPodcasts = () => {
                   title: title,
                   excerpt: excerpt,
                   podcastUrl: downloadURL,
+                  userId: id,
+                },
+                {
+                  headers: {
+                    "x-auth-token": token,
+                  },
                 }
               );
               console.log(response);

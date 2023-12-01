@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import BlogComp from "../components/BlogComp";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import Sidebar from "../components/Sidebar";
 
 const SingleBlog = () => {
   const [blog, setBlog] = useState({});
@@ -38,28 +39,31 @@ const SingleBlog = () => {
     fetchData(id);
   }, [id, url]);
 
-  console.log(blog);
-  console.log(Object.keys(blog).length);
+  // console.log(blog);
+  // console.log(Object.keys(blog).length);
   return (
     <div className="single_blog_page">
       <div className="page_header_section"></div>
+      <div className="container">
+        {isLoading ? (
+          <Loader />
+        ) : error ? (
+          <Error message={errorMsg} />
+        ) : (
+          Object.keys(blog).length > 0 && (
+            <BlogComp
+              key={blog._id}
+              id={blog._id}
+              title={blog.title}
+              message={blog.message}
+              picOne={blog.picOne}
+              picTwo={blog.picTwo}
+            />
+          )
+        )}
 
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Error message={errorMsg} />
-      ) : (
-        Object.keys(blog).length > 0 && (
-          <BlogComp
-            key={blog._id}
-            id={blog._id}
-            title={blog.title}
-            message={blog.message}
-            picOne={blog.picOne.imageUrl}
-            picTwo={blog.picTwo.imageUrl}
-          />
-        )
-      )}
+        <Sidebar />
+      </div>
     </div>
   );
 };
