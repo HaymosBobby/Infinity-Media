@@ -17,8 +17,6 @@ const NavBar = () => {
   const [scroll, setScroll] = useState(false);
 
   window.onscroll = () => {
-    setOpened(false);
-
     window.scrollY > 100 ? setScroll(true) : setScroll(false);
   };
 
@@ -80,19 +78,19 @@ const NavBar = () => {
             >
               <ul>
                 <Link to="/">
-                  <li>Home</li>
+                  <li onClick={() => setOpened(false)}>Home</li>
                 </Link>
                 <Link to="/blogs">
-                  <li>Blogs</li>
+                  <li onClick={() => setOpened(false)}>Blogs</li>
                 </Link>
                 <Link to="/about">
-                  <li>About Us</li>
+                  <li onClick={() => setOpened(false)}>About Us</li>
                 </Link>
                 <Link to="/programs">
-                  <li>Programs</li>
+                  <li onClick={() => setOpened(false)}>Programs</li>
                 </Link>
                 <Link to="/contact">
-                  <li>Contact Us</li>
+                  <li onClick={() => setOpened(false)}>Contact Us</li>
                 </Link>
               </ul>
               <div className="mobile_socials">

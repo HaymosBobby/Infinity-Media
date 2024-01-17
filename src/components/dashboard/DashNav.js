@@ -10,11 +10,11 @@ import {
 import profile from "../../img/host.jpg";
 import { Link, Navigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { Context } from "../../context/Context";
+import { AuthContext } from "../../context/AuthContext/Context";
 
 const DashNav = () => {
   // const navigate = useNavigate();
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const openDrop = (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ const DashNav = () => {
   };
 
   const handleLogout = () => {
-    dispatch({type: "LOGOUT"});
+    dispatch({ type: "LOGOUT" });
     localStorage.clear();
     <Navigate to="/imedia-admin/login" replace={true} />;
   };

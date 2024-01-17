@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import DataTable from "../../components/Datatable";
-import axios from "axios";
 import Loader from "../../components/Loader";
 import Error from "../../components/Error";
 import podcast from "../../img/podcast1.jpg";
+import { AppContext } from "../../context/AppContext/Context";
 
 const columns = [
   { field: "_id", headerName: "ID", width: 200 },
@@ -26,38 +26,40 @@ const columns = [
 ];
 
 const AllBlogs = () => {
-  const [podcasts, setPodcasts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const url = "http://localhost:5000/api/imedia-podcasts";
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-        setPodcasts(data);
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-        setError(true);
-        if (!err.response) {
-          return setErrorMsg(err.message);
-        }
-        setErrorMsg(err.response.data);
-      }
-    };
+  const { isLoadingP, errorP, errorMessageP, podcasts } =
+    useContext(AppContext);
+  // const [podcasts, setPodcasts] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(false);
+  // const [errorMsg, setErrorMsg] = useState("");
+  // const url = "http://localhost:5000/api/imedia-podcasts";
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await axios.get(url);
+  //       const data = response.data.data;
+  //       setPodcasts(data);
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       setIsLoading(false);
+  //       setError(true);
+  //       if (!err.response) {
+  //         return setErrorMsg(err.message);
+  //       }
+  //       setErrorMsg(err.response.data);
+  //     }
+  //   };
 
-    fetchData();
-  }, [url]);
+  //   fetchData();
+  // }, [url]);
 
   return (
     <div>
-      {isLoading ? (
+      {isLoadingP ? (
         <Loader />
-      ) : error ? (
-        <Error message={errorMsg} />
+      ) : errorP ? (
+        <Error message={errorMessageP} />
       ) : (
         <DataTable rows={podcasts} columns={columns} name="podcast" />
       )}

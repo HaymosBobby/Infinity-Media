@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import logo from "../../img/ilogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Context } from "../../context/Context";
+import { AuthContext } from "../../context/AuthContext/Context";
 import Spinner from "../../components/Spinner";
 import { Visibility, VisibilityOffOutlined } from "@mui/icons-material";
 
@@ -11,11 +11,10 @@ const LogIn = () => {
   const passwordRef = useRef();
 
   const [open, setOpen] = useState(false);
-
+  
   const navigate = useNavigate();
 
-  const { user, dispatch, isLoading, error, errorMessage } =
-    useContext(Context);
+  const { dispatch, isLoading, error, errorMessage } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -44,21 +43,9 @@ const LogIn = () => {
         navigate("/", { replace: true });
       }
     } catch (error) {
-      if (error.message && error.response) {
-        return dispatch({
-          type: "LOGIN_FAILURE",
-          payload: error.response.data,
-        });
-      }
-      if (error.response) {
-        return dispatch({
-          type: "LOGIN_FAILURE",
-          payload: error.response.data,
-        });
-      }
       dispatch({
         type: "LOGIN_FAILURE",
-        payload: error.message,
+        payload: error.response ? error.response.data.message : error.message,
       });
     }
   };

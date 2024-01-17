@@ -1,148 +1,141 @@
-// import AuthContext from "../../context/AuthContext";
-// import { v4 } from "uuid";
-import { useState } from "react";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-import { app } from "../../firebase";
-
+import { useEffect, useState } from "react";
 import axios from "axios";
+import Spinner from "../../components/Spinner";
+import Select from "react-select";
 
 const AddPodcasts = () => {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
-  const [progress, setProgress] = useState(0);
+  const [programId, setProgramId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [programs, setPrograms] = useState([]);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
   const id = user.userDetails._id;
 
-  const handlePodcastUpload = (e) => {
-    e.preventDefault();
-    if (file.type !== "audio/mpeg") {
-      throw new Error("Only Audio is allowed....");
-    }
-
-    const filename = `${Date.now()}-imedia-${file.name}`;
-    const storage = getStorage(app);
-    const storageRef = ref(storage, `podcasts/${filename}`);
-    const metadata = {
-      contentType: "audio/mpeg",
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/imedia-programs"
+        );
+        response && setPrograms(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+    fetchPrograms();
+  }, []);
 
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  const handlePodcastUpload = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("excerpt", excerpt);
+    formData.append("podcast", file);
+    formData.append("userId", id);
+    formData.append("programId", programId);
 
-        setProgress(progress);
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-          default:
-            break;
+    try {
+      setIsLoading(true);
+      setError(false);
+      const response = await axios.post(
+        "http://localhost:5000/api/imedia-podcasts",
+        formData,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
         }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        setProgress(0);
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          const addPodcast = async () => {
-            try {
-              const response = await axios.post(
-                "http://localhost:5000/api/imedia-podcasts",
-
-                {
-                  title: title,
-                  excerpt: excerpt,
-                  podcastUrl: downloadURL,
-                  userId: id,
-                },
-                {
-                  headers: {
-                    "x-auth-token": token,
-                  },
-                }
-              );
-              console.log(response);
-            } catch (error) {
-              console.log(error);
-            }
-          };
-
-          addPodcast();
-        });
-      }
-    );
+      );
+      setIsLoading(false);
+      console.log(response);
+    } catch (error) {
+      setIsLoading(false);
+      setError(true);
+      setErrorMessage(
+        error.response ? error.response.data.message : error.message
+      );
+      console.log(error);
+    }
   };
 
   return (
     <div className="add_podcasts">
-      <form
-        // action="http://localhost:5000/api/imedia-podcasts"
-        // method="POST"
-        // encType="multipart/form-data"
-        onSubmit={handlePodcastUpload}
-      >
-        <div>
-          <input
-            type="file"
-            name="podcast"
-            onChange={(e) => {
-              setFile(e.target.files[0]);
-              console.log(file);
-            }}
-          />
-
-          <input
-            type="range"
-            name=""
-            id=""
-            value={progress}
-            onChange={(e) => e.preventDefault()}
-          />
+      <div className="top">
+        <h1>Add new Podcast</h1>
+      </div>
+      <div className="bottom">
+        <div className="message">
+          <p>{error ? errorMessage : ""}</p>
         </div>
-        <div>
-          <input
-            type="text"
-            name="title"
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-          <input
-            type="text"
-            name="excerpt"
-            onChange={(e) => {
-              setExcerpt(e.target.value);
-            }}
-          />
-        </div>
-        <button type="submit">Create Podcast </button>
-      </form>
+        <form onSubmit={handlePodcastUpload}>
+          <div>
+            <div className="form-group">
+              <input
+                type="file"
+                name="podcast"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                }}
+              />
+            </div>
+            <div className="form-group">
+              {/* <select
+                name="program"
+                id="program"
+                value={programId}
+                onChange={(e) => {
+                  setProgramId(e.target.value);
+                }}
+              >
+                <option value="">Select Program</option>
+                {programs.length > 0 &&
+                  programs.map((program) => {
+                    return (
+                      <option value={program._id} key={program._id}>
+                        {program.programName}
+                      </option>
+                    );
+                  })}
+              </select> */}
+              <Select
+                options={programs}
+                value={programId}
+                onChange={(selectedOptions) => setProgramId(selectedOptions)}
+                getOptionLabel={(option) => option.programName}
+                getOptionValue={(option) => option._id}
+                // isMulti
+                className="programs"
+              />
+            </div>
+          </div>
+          <div>
+            <input
+              type="text"
+              name="title"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+            <input
+              type="text"
+              name="excerpt"
+              onChange={(e) => {
+                setExcerpt(e.target.value);
+              }}
+            />
+          </div>
+          <button type="submit">
+            {isLoading ? <Spinner /> : "Create Podcast"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

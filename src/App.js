@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Blogs from "./pages/Blogs";
 import Home from "./pages/Home";
 import PodcastPage from "./pages/PodcastPage";
@@ -20,22 +20,70 @@ import About from "./pages/About";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import Programs from "./pages/Programs";
-import { Context } from "./context/Context";
-import { useContext } from "react";
-// import { Context } from "./context/Context";
-
+import { AuthContext } from "./context/AuthContext/Context";
+import { useContext, useEffect } from "react";
+import { AppContext } from "./context/AppContext/Context";
+import axios from "axios";
 
 // https://images.getpng.net/uploads/preview/instagram-social-network-app-interface-icons-smartphone-frame-screen-template27-1151637511568djfdvfkdob.webp
 
 function App() {
-  // console.log(user);
-  const { user } = useContext(Context);
+  const { user } = useContext(AuthContext);
+  const { dispatch } = useContext(AppContext);
+  const location = useLocation();
 
-  // const [state ] =  useReducer(INITIAL_STATE);
+  useEffect(() => {
+    const fetchPodcasts = async () => {
+      dispatch({
+        type: "FETCH_PODCAST_START",
+      });
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/imedia-podcasts"
+        );
+
+        dispatch({
+          type: "FETCH_PODCAST_SUCCESS",
+          payload: response.data.data,
+        });
+      } catch (error) {
+        dispatch({
+          type: "FETCH_PODCAST_FAILURE",
+          payload: error.response ? error.response.data.message : error.message,
+        });
+      }
+    };
+
+    const fetchBlogs = async () => {
+      dispatch({
+        type: "FETCH_BLOG_START",
+      });
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/imedia-blogs"
+        );
+
+        dispatch({
+          type: "FETCH_BLOG_SUCCESS",
+          payload: response.data.data,
+        });
+      } catch (error) {
+        dispatch({
+          type: "FETCH_BLOG_FAILURE",
+          payload: error.response ? error.response.data.message : error.message,
+        });
+      }
+    };
+    location.pathname !== "/imedia-admin/login" &&
+      location.pathname !== "/imedia-admin/signup" &&
+      fetchPodcasts();
+    location.pathname !== "/imedia-admin/login" &&
+      location.pathname !== "/imedia-admin/signup" &&
+      fetchBlogs();
+  }, [dispatch,location.pathname]);
 
   return (
     <div className="App">
-      {/* <AuthContextProvder> */}
       <Routes>
         <Route
           path="/imedia-admin/dashboard"
@@ -53,12 +101,11 @@ function App() {
           <Route path="add-programs" element={<AddPrograms />} />
         </Route>
         <Route element={<WithoutNav />}>
-          {/* <Route path="/imedia-admin/dashboard" element={<Admin />} /> */}
           <Route
             exact
             path="/imedia-admin/login"
             element={
-              user && user !== null ? (
+              user && user !== null && user.isAdmin ? (
                 <Navigate to="/imedia-admin/dashboard" />
               ) : (
                 <LogIn />
@@ -68,7 +115,7 @@ function App() {
           <Route exact path="/imedia-admin/signup" element={<SignUp />} />
         </Route>
         <Route element={<WithNav />}>
-          <Route exact path="/" element={<Home />} />
+          <Route exact index element={<Home />} />
           <Route exact path="/blogs" element={<Blogs />} />
           <Route exact path="/podcast/:id" element={<PodcastPage />} />
           <Route exact path="/blog/:id" element={<SingleBlog />} />
@@ -83,8 +130,6 @@ function App() {
         onTimeUpdate={timeUpdateHandler}
         onEnded={songEndHandler}
       ></audio> */}
-
-      {/* </AuthContextProvider> */}
     </div>
   );
 }

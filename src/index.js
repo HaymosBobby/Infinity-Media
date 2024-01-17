@@ -3,16 +3,19 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { ContextProvider } from "./context/Context";
+import { AuthContextProvider } from "./context/AuthContext/Context";
+import { AppContextProvider } from "./context/AppContext/Context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ContextProvider>
+    <AuthContextProvider>
+      <AppContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AppContextProvider>
+    </AuthContextProvider>
   </React.StrictMode>
 );
 

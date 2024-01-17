@@ -11,7 +11,8 @@
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Nunito", sans-serif;
+  // font-family: "Poppins", sans-serif;
   line-height: 1.5;
   accent-color: var(--primary_color);
 }
@@ -201,6 +202,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   flex: 9;
 
   img {
@@ -268,9 +270,6 @@ img {
   }
 }
 
-
-
-
 .image_cell {
   display: flex;
   align-items: center;
@@ -308,6 +307,16 @@ img {
   }
 }
 
+.data_table {
+  height: 400px;
+  width: 100%;
+}
+
+.podcast.active {
+  background: #9e9393;
+  color: #fff;
+}
+
 @import "./navbar";
 @import "./homeSection";
 @import "./podcast";
@@ -320,7 +329,7 @@ img {
 @import "./lin&sin";
 @import "./dashboardSidebar";
 @import "./addBlogs";
-
+@import "./addPodcasts";
 
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDczZTU5ODczOWRlY2M0YWM2MmYxOWEiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg1MzE3MDE3fQ.8_ohfvkdSz30olecppQNvMtgs95FhtaPYw-MHv-SGLA
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDczZTU5ODczOWRlY2M0YWM2MmYxOWEiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg1MzE3MTg2fQ.Pgjm6dHX8VRdbSaMMDywyKxP5RZV9PAanASNGyRYjXs

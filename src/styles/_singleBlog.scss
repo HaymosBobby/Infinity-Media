@@ -5,7 +5,6 @@
     overflow: hidden;
     margin-bottom: 2rem;
 
-    
     img {
       transition: all 0.75s ease-in-out;
 
@@ -16,20 +15,22 @@
   }
 
   .single_blog_content {
-
-    p, .imaged_paragraph {
+    .imaged_paragraph {
       margin: 1rem 0;
 
-     img {
-      width: 300px;
-      height: 200px;
-      float: right;
+      img {
+        width: 300px;
+        height: 200px;
+        margin-left: 20px;
+        float: right;
 
-      @media screen and (max-width: 768px) {
-        float: none;
-        width: 100%;
+        @media screen and (max-width: 768px) {
+          float: none;
+          width: 100%;
+          margin-left: 0;
+          // margin: 20px;
+        }
       }
-     } 
     }
   }
 }

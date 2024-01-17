@@ -1,66 +1,66 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Podcast from "./Podcast";
-import axios from "axios";
 import Loader from "./Loader";
 import Error from "./Error";
+import { AppContext } from "../context/AppContext/Context";
 
 const Podcasts = () => {
-  const [podcasts, setPodcasts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const { isLoadingP, errorP, errorMessageP, podcasts } =
+    useContext(AppContext);
 
+  const [data, setData] = useState([]);
+  const [currentPodcast, setCurrentPodcast] = useState(null);
   useEffect(() => {
-    const getPodcasts = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axios.get(
-          "http://localhost:5000/api/imedia-podcasts"
-        );
-        res && setPodcasts(res.data.data);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err)
-        setIsLoading(false);
-        setError(true);
-        if (!err.response) {
-          return setErrorMsg(err.message);
-        }
-        setErrorMsg(err.response.data.message);
+    podcasts && podcasts.length > 0 && setData(podcasts);
+  }, [podcasts]);
+
+  const handleData = (podcastId) => {
+    const newData = podcasts.map((p) => {
+      if (p._id === podcastId) {
+        return {
+          ...p,
+          active: true,
+        };
+      } else {
+        return {
+          ...p,
+          active: false,
+        };
       }
-    };
+    });
 
-    getPodcasts();
-  }, [setPodcasts, setIsLoading, setError, setErrorMsg]);
-
-  
+    setData(newData);
+    setCurrentPodcast(
+      data.find((p) => p._id.toString() === podcastId.toString())
+    );
+  };
 
   return (
-    <div>
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Error message={errorMsg} />
-      ) : (
-        <div>
-          {podcasts.length > 0 &&
-            podcasts.map((podcast) => {
+    <>
+      <div>
+        {isLoadingP ? (
+          <Loader />
+        ) : errorP ? (
+          <Error message={errorMessageP} />
+        ) : (
+          <div>
+            {data.map((podcast) => {
               return (
                 <Podcast
-                  title={podcast.title}
-                  excerpt={podcast.excerpt}
-                  createdAt={podcast.createdAt}
-                  podcastURL={podcast.podcastURL}
-                  picURL={podcast.programId.picURL} 
-                  podcasts={podcasts}
+                  podcast={podcast}
                   key={podcast._id}
-                  id={podcast._id}
+                  podcasts={podcasts}
+                  setData={setData}
+                  currentPodcast={currentPodcast}
+                  data={data}
+                  handleData={handleData}
                 />
               );
             })}
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

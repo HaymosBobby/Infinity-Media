@@ -15,14 +15,45 @@ import podcast1 from "../img/podcast1.jpg";
 import host from "../img/host.jpg";
 import { useRef, useState } from "react";
 
-const PodcastComp = ({ title, excerpt, podcastUrl, createdAt }) => {
-  const iso = new Date(createdAt);
-  const date = iso.toLocaleDateString("sv-SE");
+const PodcastComp = ({ podcast }) => {
+  const {
+    title,
+    excerpt,
+    podcastURL,
+    createdAt,
+    programId,
+    podcastSize,
+    userId,
+  } = podcast;
+  const { picURL, anchor } = programId;
+  const author = userId.username;
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const podcastRef = useRef(null);
+
+  const options = {
+    // weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const iso = new Date(createdAt);
+  const date = iso.toLocaleDateString("en-US", options);
+
+  const convertDuration = (duration) => {
+    var hours = Math.floor(duration / 3600);
+    var minutes = Math.floor((duration % 3600) / 60);
+    var seconds = Math.floor(duration % 60);
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const totalDuration = convertDuration(duration);
+
+  const size = (podcastSize / (1024 * 1024)).toFixed(2);
 
   const handlePodcast = () => {
     setIsPlaying(!isPlaying);
@@ -74,25 +105,26 @@ const PodcastComp = ({ title, excerpt, podcastUrl, createdAt }) => {
       <div className="podcast_page_section">
         <div className="podcast_image">
           <div>
-            <img src={podcast1} alt="podcast" />
+            <img src={picURL ? picURL : podcast1} alt="podcast" />
           </div>
           <button type="submit">Subscribe Now</button>
         </div>
 
         <div className="podcast_content">
           <div className="podcast_info">
-            <h5 className="title txt_small">
-              <Podcasts sx={{ fontSize: 18 }} className="icon" /> Infinity Media
-            </h5>
-            <h5 className="date txt_small">
+            <span className="title txt_small">
+              <Podcasts sx={{ fontSize: 18 }} className="icon" /> {author}
+            </span>
+            <span className="date txt_small">
               <CalendarMonth sx={{ fontSize: 18 }} className="icon" /> {date}
-            </h5>
-            <h5 className="time txt_small">
-              <TimerOutlined sx={{ fontSize: 18 }} className="icon" /> 00:00
-            </h5>
-            <h5 className="info txt_small">
-              <MusicNote sx={{ fontSize: 18 }} className="icon" /> 3.7mb
-            </h5>
+            </span>
+            <span className="time txt_small">
+              <TimerOutlined sx={{ fontSize: 18 }} className="icon" />
+              {totalDuration}
+            </span>
+            <span className="info txt_small">
+              <MusicNote sx={{ fontSize: 18 }} className="icon" /> {size}mb
+            </span>
           </div>
           <div className="podcast_details">
             <h2>{title}</h2>
@@ -166,8 +198,8 @@ const PodcastComp = ({ title, excerpt, podcastUrl, createdAt }) => {
           <div className="host">
             <h4>Hosted by</h4>
             <div>
-              <img src={host} alt="Host" />
-              <h5>Adegoke Michael Oluwatobiloba (A.M.O)</h5>
+              <img src={picURL ? picURL : host} alt="Host" />
+              <h5>{anchor}</h5>
             </div>
           </div>
         </div>
@@ -175,7 +207,7 @@ const PodcastComp = ({ title, excerpt, podcastUrl, createdAt }) => {
       <div className="podcast_page_info">{excerpt}</div>
 
       <audio
-        src={podcastUrl}
+        src={podcastURL}
         ref={podcastRef}
         onTimeUpdate={timeUpdateHandler}
         onEnded={songEndHandler}

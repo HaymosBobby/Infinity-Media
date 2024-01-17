@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import DataTable from "../../components/Datatable";
-import axios from "axios";
 import Loader from "../../components/Loader";
 import Error from "../../components/Error";
+import { AppContext } from "../../context/AppContext/Context";
 
 const columns = [
   { field: "_id", headerName: "ID", width: 200 },
@@ -15,7 +15,7 @@ const columns = [
     renderCell: (params) => {
       return (
         <div className="image_cell">
-          <img className="image" src={params.row.picOne} alt="" />
+          <img className="image" src={params.row.picOneURL} alt="" />
           {params.row.title}
         </div>
       );
@@ -25,40 +25,41 @@ const columns = [
 ];
 
 const AllBlogs = () => {
-  const [blogLists, setBlogLists] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const url = "http://localhost:5000/api/imedia-blogs";
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-        setBlogLists(data);
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-        setError(true);
-        if (!err.response) {
-          return setErrorMsg(err.message);
-        }
-        setErrorMsg(err.response.data);
-      }
-    };
+  const { isLoadingB, errorB, errorMessageB, blogs } = useContext(AppContext);
+  // const [blogLists, setBlogLists] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(false);
+  // const [errorMsg, setErrorMsg] = useState("");
+  // const url = "http://localhost:5000/api/imedia-blogs";
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await axios.get(url);
+  //       const data = response.data.data;
+  //       setBlogLists(data);
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       setIsLoading(false);
+  //       setError(true);
+  //       if (!err.response) {
+  //         return setErrorMsg(err.message);
+  //       }
+  //       setErrorMsg(err.response.data);
+  //     }
+  //   };
 
-    fetchData();
-  }, [url]);
+  //   fetchData();
+  // }, [url]);
 
   return (
     <div>
-      {isLoading ? (
+      {isLoadingB ? (
         <Loader />
-      ) : error ? (
-        <Error message={errorMsg} />
+      ) : errorB ? (
+        <Error message={errorMessageB} />
       ) : (
-        <DataTable rows={blogLists} columns={columns} name="blog" />
+        <DataTable rows={blogs} columns={columns} name="blog" />
       )}
     </div>
   );

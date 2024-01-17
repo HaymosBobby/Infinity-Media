@@ -34,7 +34,6 @@ const DataTable = ({ rows, columns, name }) => {
           "x-auth-token": token,
         },
       });
-      
     } catch (error) {
       console.log(error);
     }
@@ -64,7 +63,7 @@ const DataTable = ({ rows, columns, name }) => {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div className="data_table">
       <DataGrid
         // rows={rows}
         rows={data}

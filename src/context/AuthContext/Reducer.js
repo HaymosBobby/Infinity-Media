@@ -2,17 +2,19 @@ const LoginReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN_START":
       return {
-        // ...state,
+        ...state,
         isLoading: true,
       };
     case "LOGIN_SUCCESS":
-      localStorage.setItem("user", JSON.stringify(action.payload));
+      // localStorage.setItem("user", JSON.stringify(action.payload));
       return {
+        ...state,
         isLoading: false,
         user: action.payload,
       };
     case "LOGIN_FAILURE":
       return {
+        ...state,
         isLoading: false,
         error: true,
         errorMessage: action.payload,

@@ -36,7 +36,7 @@
 
     .lists {
       .func {
-        padding: 10px;
+        padding: 5px 10px;
 
         span {
           font-size: 0.65rem;
@@ -49,10 +49,10 @@
 
       .list_item {
         transition: all 0.1s ease-in-out;
-        padding: 10px;
+        padding: 7px 10px;
         cursor: pointer;
         display: flex;
-        align-items: center;
+        // align-items: center;
         color: var(--primary_color);
 
         &:hover {
@@ -66,8 +66,9 @@
         }
 
         svg {
-          width: 20px;
-          height: 20px;
+          // width: 20px;
+          // height: 20px;
+          font-size: 18px;
           margin-right: 10px;
         }
 
@@ -75,6 +76,29 @@
           font-size: 0.8rem;
           text-transform: capitalize;
         }
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+    .colorOption {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 0.5px solid #c5b4b452;
+      margin-right: 10px;
+      cursor: pointer;
+
+      &:nth-child(1) {
+        background: #f5f5f5;
+      }
+      &:nth-child(2) {
+        background: #333;
       }
     }
   }

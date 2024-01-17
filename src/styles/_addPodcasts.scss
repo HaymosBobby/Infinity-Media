@@ -1,0 +1,17 @@
+.add_podcasts {
+  .top,
+  .bottom {
+    -webkit-box-shadow: 2px 4px 10px 1px #c9c9c978;
+    box-shadow: 2px 4px 10px 1px #c9c9c978;
+    padding: 10px;
+  }
+  
+  .top {
+    margin-bottom: 20px;
+
+    h1 {
+      color: #d3d3d3;
+      font-size: 1.15rem;
+    }
+  }
+}
